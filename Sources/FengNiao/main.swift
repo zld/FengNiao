@@ -70,7 +70,7 @@ cli.addOption(resourceExtOption)
 
 let fileExtOption = MultiStringOption(
     shortFlag: "f", longFlag: "file-extensions",
-    helpMessage: "In which types of files we should search for resource usage. Default is 'm mm swift xib storyboard plist'")
+    helpMessage: "In which types of files we should search for resource usage. Default is 'm mm swift xib storyboard plist strings json js'")
 cli.addOption(fileExtOption)
 
 let skipProjRefereceCleanOption = BoolOption(
@@ -85,6 +85,12 @@ cli.addOption(versionOption)
 let helpOption = BoolOption(shortFlag: "h", longFlag: "help",
                       helpMessage: "Print this help message.")
 cli.addOption(helpOption)
+
+let excludedResourceOption = MultiStringOption(shortFlag: "er", longFlag: "exclude-resource", helpMessage: "")
+cli.addOption(excludedResourceOption)
+
+let excludedFileOption = MultiStringOption(shortFlag: "ef", longFlag: "exclude-file", helpMessage: "")
+cli.addOption(excludedFileOption)
 
 do {
     try cli.parse()
@@ -114,10 +120,14 @@ let projectPath = projectPathOption.value ?? "."
 let isForce = isForceOption.value
 let excludePaths = excludePathOption.value ?? []
 let resourceExtentions = resourceExtOption.value ?? ["imageset", "jpg", "png", "gif"]
-let fileExtensions = fileExtOption.value ?? ["m", "mm", "swift", "xib", "storyboard", "plist"]
+let fileExtensions = fileExtOption.value ?? ["m", "mm", "swift", "xib", "storyboard", "plist", "strings", "json", "js"]
+
+let excludedResourcePaths = excludedResourceOption.value ?? []
+let excludedFilePaths = excludedFileOption.value ?? []
 
 let fengNiao = FengNiao(projectPath: projectPath,
-                        excludedPaths: excludePaths,
+                        excludedResourcePaths: excludedResourcePaths,
+                        excludedFilePaths: excludedFilePaths,
                         resourceExtensions: resourceExtentions,
                         searchInFileExtensions: fileExtensions)
 

@@ -38,6 +38,7 @@ enum FileType {
         case "m", "mm": self = .objc
         case "xib", "storyboard": self = .xib
         case "plist": self = .plist
+        case "strings": self = .objc
         default: return nil
         }
     }
@@ -94,7 +95,8 @@ public enum FengNiaoError: Error {
 public struct FengNiao {
 
     let projectPath: Path
-    let excludedPaths: [Path]
+    let excludedResourcePaths: [Path]
+    let excludedFilePaths: [Path]
     let resourceExtensions: [String]
     let searchInFileExtensions: [String]
     
@@ -103,10 +105,11 @@ public struct FengNiao {
         return resourceExtensions.filter { !regularDirExtensions.contains($0) }
     }
     
-    public init(projectPath: String, excludedPaths: [String], resourceExtensions: [String], searchInFileExtensions: [String]) {
+    public init(projectPath: String, excludedResourcePaths: [String], excludedFilePaths: [String], resourceExtensions: [String], searchInFileExtensions: [String]) {
         let path = Path(projectPath).absolute()
         self.projectPath = path
-        self.excludedPaths = excludedPaths.map { path + Path($0) }
+        self.excludedResourcePaths = excludedResourcePaths.map { path + Path($0) }
+        self.excludedFilePaths = excludedFilePaths.map { path + Path($0) }
         self.resourceExtensions = resourceExtensions
         self.searchInFileExtensions = searchInFileExtensions
     }
@@ -171,7 +174,7 @@ public struct FengNiao {
     }
     
     func allResourceFiles() -> [String: Set<String>] {
-        let find = ExtensionFindProcess(path: projectPath, extensions: resourceExtensions, excluded: excludedPaths)
+        let find = ExtensionFindProcess(path: projectPath, extensions: resourceExtensions, excluded: excludedResourcePaths)
         guard let result = find?.execute() else {
             print("Resource finding failed.".red)
             return [:]
@@ -219,7 +222,7 @@ public struct FengNiao {
                 continue
             }
             
-            if excludedPaths.contains(subPath) {
+            if excludedFilePaths.contains(subPath) {
                 continue
             }
             
