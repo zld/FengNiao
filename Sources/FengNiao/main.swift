@@ -29,7 +29,7 @@ import Rainbow
 import FengNiaoKit
 import PathKit
 
-let appVersion = "0.5.0"
+let appVersion = "0.6.0"
 
 #if os(Linux)
 let EX_OK: Int32 = 0
@@ -120,7 +120,7 @@ let projectPath = projectPathOption.value ?? "."
 let isForce = isForceOption.value
 let excludePaths = excludePathOption.value ?? []
 let resourceExtentions = resourceExtOption.value ?? ["imageset", "jpg", "png", "gif"]
-let fileExtensions = fileExtOption.value ?? ["m", "mm", "swift", "xib", "storyboard", "plist", "strings", "json", "js"]
+let fileExtensions = fileExtOption.value ?? ["h", "m", "mm", "swift", "xib", "storyboard", "plist", "strings", "json", "js"]
 
 let excludedResourcePaths = excludedResourceOption.value ?? []
 let excludedFilePaths = excludedFileOption.value ?? []
